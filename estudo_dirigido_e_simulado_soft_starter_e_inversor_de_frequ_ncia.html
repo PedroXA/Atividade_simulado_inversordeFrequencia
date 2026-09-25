@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acionamentos Eletroeletrônicos Industriais - Arquivo Técnico & Simulado Pro</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome 6 Pro-style Free CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            panel: {
+              950: '#070d17',
+              900: '#0b1329',
+              850: '#0f1a36',
+              800: '#142347',
+              700: '#1e3363',
+            },
+            cyan: {
+              450: '#00d2f0',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #070d17;
+      color: #e2e8f0;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* Efeito de Arquivo / Gaveteiro Técnico */
+    .cabinet-drawer {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    }
+    .cabinet-drawer.active {
+      box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.3), 0 0 0 1px rgba(56, 189, 248, 0.3);
+    }
+    .drawer-handle {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 5px rgba(0,0,0,0.4);
+    }
+    .drawer-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease-out, opacity 0.3s ease-out;
+    }
+    .drawer-content.open {
+      max-height: 4000px;
+      opacity: 1;
+      transition: max-height 0.6s ease-in, opacity 0.4s ease-in;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b1329;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e3363;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0284c7;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .drawer-content { max-height: none !important; opacity: 1 !important; }
+      .cabinet-drawer { border: 1px solid #94a3b8 !important; margin-bottom: 20px !important; }
+    }
+  </style>
+</head>
+
+<body class="selection:bg-cyan-500 selection:text-slate-950 flex flex-col min-h-screen">
+
+  <!-- Top Bar de Engenharia -->
+  <header class="bg-panel-950 border-b border-panel-700/60 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo Técnico -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-cyan-600 via-sky-600 to-blue-700 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 border border-cyan-400/30">
+            <i class="fa-solid fa-microchip text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-base sm:text-lg tracking-tight text-white">PRO-DRIVE</span>
+              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-700/60">
+                Padrão IF / CEFET
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 hidden sm:block">Acionamentos Eletroeletrônicos & Diagnóstico Industrial</p>
+          </div>
+        </div>
+
+        <!-- Seletor de Módulos (Menu Rápido) -->
+        <div class="flex items-center gap-2">
+          <button onclick="scrollToSection('gaveteiro')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-panel-800 hover:bg-panel-700 text-cyan-300 border border-cyan-500/30 transition flex items-center gap-2">
+            <i class="fa-solid fa-folder-closed"></i>
+            <span class="hidden md:inline">Gaveteiro Técnico</span>
+          </button>
+          <button onclick="scrollToSection('calculadora')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-panel-800 hover:bg-panel-700 text-amber-300 border border-amber-500/30 transition flex items-center gap-2">
+            <i class="fa-solid fa-calculator"></i>
+            <span class="hidden md:inline">Bancada de Cálculo</span>
+          </button>
+          <button onclick="scrollToSection('simulado')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Simulado 30Q</span>
+            <span id="nav-count" class="bg-black/30 px-1.5 py-0.2 rounded text-[10px] font-mono">0/30</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner de Destaque -->
+  <div class="bg-gradient-to-b from-panel-950 via-panel-900 to-panel-950 border-b border-panel-800 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div class="space-y-3 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 text-xs font-bold tracking-wide">
+          <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+          Conformidade com Normas Regulamentadoras NR-10 & NR-12
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+          Estudo Dirigido & Simulado Avançado
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Acervo didático e instrumental sobre <strong class="text-cyan-400 font-semibold">Chaves Estáticas Soft-Starter</strong> e <strong class="text-sky-400 font-semibold">Inversores de Frequência PWM</strong>. Fundamentado na literatura dos Institutos Federais, CEFETs e manuais de engenharia de aplicação (WEG, Siemens e Schneider Electric).
+        </p>
+      </div>
+
+      <!-- Placas de Resumo Técnico -->
+      <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 min-w-[290px]">
+        <div class="bg-panel-850/80 border border-cyan-500/30 rounded-xl p-3.5 shadow-lg">
+          <div class="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-bolt"></i> Soft-Starter
+          </div>
+          <div class="text-sm font-extrabold text-white">Tiristores (SCR)</div>
+          <div class="text-[11px] text-slate-400">Controle Tensão RMS (60 Hz Fixo)</div>
+        </div>
+        <div class="bg-panel-850/80 border border-sky-500/30 rounded-xl p-3.5 shadow-lg">
+          <div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-wave-square"></i> Inversor VFD
+          </div>
+          <div class="text-sm font-extrabold text-white">Ponte 6x IGBT / PWM</div>
+          <div class="text-[11px] text-slate-400">Variação V/F e Torque Vetorial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 flex-1">
+
+    <!-- SEÇÃO: GAVETEIRO TÉCNICO INTERATIVO -->
+    <section id="gaveteiro" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-panel-700/80 gap-2">
+        <div>
+          <h2 class="text-2xl font-black text-white flex items-center gap-3">
+            <i class="fa-solid fa-box-archive text-cyan-400"></i>
+            Gaveteiro Técnico Modular de Consulta
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+            Clique nos puxadores para abrir ou fechar as gavetas com a base teórica, diretrizes e procedimentos de bancada.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <button onclick="toggleAllDrawers(true)" class="px-3 py-1.5 rounded bg-panel-800 hover:bg-panel-700 text-slate-300 font-semibold transition">
+            <i class="fa-solid fa-angles-down mr-1"></i> Expandir Todas
+          </button>
+          <button onclick="toggleAllDrawers(false)" class="px-3 py-1.5 rounded bg-panel-800 hover:bg-panel-700 text-slate-300 font-semibold transition">
+            <i class="fa-solid fa-angles-up mr-1"></i> Recolher
+          </button>
+        </div>
+      </div>
+
+      <!-- CONTAINER DO GAVETEIRO -->
+      <div class="space-y-4">
+
+        <!-- GAVETA 1: Princípios Físico-Eletrônicos & Topologia -->
+        <article class="cabinet-drawer bg-panel-900 border border-panel-700 rounded-xl overflow-hidden active" id="drawer-1">
+          <!-- Puxador da Gaveta -->
+          <div onclick="toggleDrawer('drawer-1')" class="drawer-handle p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none border-b border-panel-700 hover:border-cyan-500/50 transition">
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="w-10 h-10 rounded-lg bg-cyan-950 border border-cyan-500/50 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm shrink-0">
+                01
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base sm:text-lg font-bold text-white tracking-wide">
+                    Topologia de Potência & Princípios Físico-Eletrônicos
+                  </h3>
+                  <span class="hidden md:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    Semicondutores SCR vs IGBT
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400">Modulação por ângulo de disparo vs. Ponte inversora com chaveamento PWM</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-cyan-400 hidden sm:inline">GAVETA [01]</span>
+              <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 drawer-icon"></i>
+            </div>
+          </div>
+
+          <!-- Conteúdo da Gaveta -->
+          <div class="drawer-content open p-6 sm:p-8 space-y-6 bg-panel-900/60 text-slate-300 text-sm">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
+              <!-- Cartão Soft-Starter -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-cyan-500/30 space-y-3">
+                <div class="flex items-center justify-between border-b border-panel-800 pb-3">
+                  <h4 class="font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-microchip text-cyan-400"></i>
+                    Soft-Starter: Topologia em Tiristores
+                  </h4>
+                  <span class="text-[11px] font-mono text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded">6x SCRs Antiparalelos</span>
+                </div>
+                <p class="text-xs leading-relaxed">
+                  O circuito de potência de uma chave de partida estática é constituído por <strong>pares de tiristores (SCRs) em conexão antiparalela</strong> para cada fase de alimentação trifásica da rede CA (L1, L2, L3).
+                </p>
+                <div class="bg-panel-900 p-3.5 rounded-lg border border-panel-800 text-xs space-y-2">
+                  <div class="font-bold text-cyan-300">Modulação do Ângulo de Condução (Alpha):</div>
+                  <ul class="list-disc list-inside space-y-1 text-slate-300">
+                    <li>Ao receber o comando de partida, o microprocessador dispara o gate dos SCRs com um ângulo elevado (próximo de 180 graus), liberando uma pequena porção da crista da senóide.</li>
+                    <li>Ao longo do tempo tr ajustado na rampa, o ângulo de disparo é reduzido continuamente em direção a zero grau, aumentando o valor eficaz (RMS) da tensão até atingir 100% de Vn.</li>
+                    <li><strong class="text-amber-400">Atenção Crítica:</strong> A frequência da rede NÃO é alterada. Mantém-se inalterada em 60 Hz ao longo de todo o acionamento.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Cartão Inversor de Frequência -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-sky-500/30 space-y-3">
+                <div class="flex items-center justify-between border-b border-panel-800 pb-3">
+                  <h4 class="font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-wave-square text-sky-400"></i>
+                    Inversor: Estágios Retificador, Link CC e IGBTs
+                  </h4>
+                  <span class="text-[11px] font-mono text-sky-300 bg-sky-950 px-2 py-0.5 rounded">PWM Trifásico</span>
+                </div>
+                <p class="text-xs leading-relaxed">
+                  Diferente da soft-starter, o inversor de frequência executa uma <strong>dupla conversão de energia</strong> através de três módulos bem definidos:
+                </p>
+                <div class="bg-panel-900 p-3.5 rounded-lg border border-panel-800 text-xs space-y-1.5">
+                  <div><strong class="text-white">1. Ponte Retificadora:</strong> Diodos robustos transformam a tensão alternada trifásica em pulsos de corrente contínua.</div>
+                  <div><strong class="text-white">2. Circuito Intermediário (Link CC):</strong> Banco de capacitores eletrolíticos e indutores que filtram o ripple e sustentam a tensão contínua em torno de 1,35 x Vrede.</div>
+                  <div><strong class="text-white">3. Estágio Inversor (Ponte de 6 IGBTs):</strong> Transistores chaveiam o barramento CC em alta frequência (2 kHz a 16 kHz) por modulação PWM (Pulse Width Modulation), sintetizando tensões e frequências variáveis defasadas em 120 graus na saída (U, V, W).</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Tabela Comparativa de Arquitetura -->
+            <div class="overflow-x-auto border border-panel-800 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-panel-950 text-slate-300 uppercase font-mono border-b border-panel-800">
+                  <tr>
+                    <th class="p-3">Característica Técnica</th>
+                    <th class="p-3 text-cyan-400">Chave Soft-Starter</th>
+                    <th class="p-3 text-sky-400">Inversor de Frequência</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-panel-800 font-sans">
+                  <tr class="hover:bg-panel-950/40">
+                    <td class="p-3 font-semibold text-white">Componentes de Chaveamento</td>
+                    <td class="p-3">Tiristores SCR (Pares Antiparalelos)</td>
+                    <td class="p-3">Transistores Bipolares de Porta Isolada (IGBTs)</td>
+                  </tr>
+                  <tr class="hover:bg-panel-950/40">
+                    <td class="p-3 font-semibold text-white">Controle de Frequência</td>
+                    <td class="p-3 text-rose-400 font-mono">Inexistente (Fixa em 60 Hz)</td>
+                    <td class="p-3 text-emerald-400 font-mono">Total (0 Hz até 300+ Hz via PWM)</td>
+                  </tr>
+                  <tr class="hover:bg-panel-950/40">
+                    <td class="p-3 font-semibold text-white">Fator de Potência Visto pela Rede</td>
+                    <td class="p-3">Variável e indutivo durante a aceleração (cos phi ~0,3 a 0,8)</td>
+                    <td class="p-3 text-emerald-400 font-semibold">Praticamente unitário (~0,98 a 1,00) devido à ponte retificadora</td>
+                  </tr>
+                  <tr class="hover:bg-panel-950/40">
+                    <td class="p-3 font-semibold text-white">Variação de Rotação em Regime</td>
+                    <td class="p-3">Não permite (somente partida e parada)</td>
+                    <td class="p-3">Controle contínuo de rotação sob regime permanente</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <!-- GAVETA 2: Aplicação Operacional, Curvas e Comandos -->
+        <article class="cabinet-drawer bg-panel-900 border border-panel-700 rounded-xl overflow-hidden" id="drawer-2">
+          <!-- Puxador da Gaveta -->
+          <div onclick="toggleDrawer('drawer-2')" class="drawer-handle p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none border-b border-panel-700 hover:border-cyan-500/50 transition">
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="w-10 h-10 rounded-lg bg-sky-950 border border-sky-500/50 text-sky-400 flex items-center justify-center font-mono font-bold text-sm shrink-0">
+                02
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base sm:text-lg font-bold text-white tracking-wide">
+                    Aplicação Operacional, Curvas de Torque & Comandos CLP
+                  </h3>
+                  <span class="hidden md:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                    V/F Escalar vs Vetorial & IHM
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400">Pedestal Vp, prevenção do golpe de aríete, entradas analógicas 4-20mA / 0-10V</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-sky-400 hidden sm:inline">GAVETA [02]</span>
+              <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 drawer-icon"></i>
+            </div>
+          </div>
+
+          <!-- Conteúdo da Gaveta -->
+          <div class="drawer-content p-6 sm:p-8 space-y-6 bg-panel-900/60 text-slate-300 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <!-- Bloco 1: Controle Escalar vs Vetorial -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-panel-800 space-y-3">
+                <h4 class="font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-diagram-project text-sky-400"></i>
+                  Escalar (V/F) vs. Vetorial
+                </h4>
+                <p class="text-xs leading-relaxed">
+                  <strong>Controle Escalar:</strong> Mantém a relação linear V/F fixa até a frequência nominal (60 Hz). Indicado para cargas centrífugas com regime nominal ou bombas. Abaixo de 10 Hz o motor perde considerável conjugado mecânico.
+                </p>
+                <p class="text-xs leading-relaxed">
+                  <strong>Controle Vetorial:</strong> Desacopla a corrente do estator em corrente de magnetização (IM) e corrente de produção de conjugado. Garante torque nominal pleno a partir de 0 Hz (ideal para pontes rolantes, extrusoras e elevadores).
+                </p>
+                <div class="p-2.5 rounded bg-panel-900 border border-panel-700 text-xs font-mono text-amber-300">
+                  Acima de 60 Hz: Enfraquecimento de Campo (Tensão estagna no teto de rede e o torque decresce com o aumento de F).
+                </div>
+              </div>
+
+              <!-- Bloco 2: Pedestal Vp & Golpe de Aríete -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-panel-800 space-y-3">
+                <h4 class="font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-faucet-drip text-cyan-400"></i>
+                  Pedestal & Golpe de Aríete
+                </h4>
+                <p class="text-xs leading-relaxed">
+                  <strong>Tensão de Pedestal (Vp):</strong> Ajustada entre 30% a 70% de Vn, aplica um degrau de tensão inicial no instante zero da rampa para conferir força instantânea e quebrar a inércia estática da mecânica.
+                </p>
+                <p class="text-xs leading-relaxed">
+                  <strong>Prevenção do Golpe de Aríete:</strong> Em saneamento e bombeamento predial, desligar a bomba de forma direta gera o retorno brusco da massa líquida contra a válvula de retenção. A rampa de desaceleração suave da soft-starter reduz gradativamente o fluxo, eliminando ondas de sobrepressão destrutivas.
+                </p>
+              </div>
+
+              <!-- Bloco 3: Integração com CLP & IHM -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-panel-800 space-y-3">
+                <h4 class="font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-network-wired text-emerald-400"></i>
+                  Interface com CLP & IHM
+                </h4>
+                <ul class="text-xs space-y-2 text-slate-300">
+                  <li><strong>Entradas Digitais (DI1 a DIn):</strong> Acionam funções lógicas como Liga/Desliga (Run/Stop), sentido de giro (horário/anti-horário) e reset de falhas (nível 24 Vcc).</li>
+                  <li><strong>Entradas Analógicas (AI1 / AI2):</strong> Recebem sinal de referência de frequência do CLP: 0 a 10 Vcc ou 4 a 20 mA (4 mA = freq. mínima; 20 mA = freq. máxima).</li>
+                  <li><strong>Saídas a Relé (Bornes 10-NF, 11-C, 12-NA):</strong> Informam ao CLP o status de equipamento pronto (Ready), em rotação (Run) ou em condição de falha geral.</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </article>
+
+        <!-- GAVETA 3: Memorial de Cálculos e Dimensionamento -->
+        <article class="cabinet-drawer bg-panel-900 border border-panel-700 rounded-xl overflow-hidden" id="drawer-3">
+          <!-- Puxador da Gaveta -->
+          <div onclick="toggleDrawer('drawer-3')" class="drawer-handle p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none border-b border-panel-700 hover:border-cyan-500/50 transition">
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="w-10 h-10 rounded-lg bg-amber-950 border border-amber-500/50 text-amber-400 flex items-center justify-center font-mono font-bold text-sm shrink-0">
+                03
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base sm:text-lg font-bold text-white tracking-wide">
+                    Memorial de Cálculos & Dimensionamento de Bancada
+                  </h3>
+                  <span class="hidden md:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    Formulário Oficial de Engenharia
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400">Cinemática síncrona, conversão de potência CV/HP para kW e corrente por nível de tensão</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-amber-400 hidden sm:inline">GAVETA [03]</span>
+              <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 drawer-icon"></i>
+            </div>
+          </div>
+
+          <!-- Conteúdo da Gaveta -->
+          <div class="drawer-content p-6 sm:p-8 space-y-6 bg-panel-900/60 text-slate-300 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <!-- Fórmula 1: Rotação Síncrona -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-amber-500/30 space-y-3">
+                <span class="text-xs uppercase font-mono font-bold text-amber-400 block">Equação de Velocidade Síncrona</span>
+                <div class="bg-panel-900 p-3 rounded-lg border border-panel-800 text-center font-mono text-base font-bold text-white">
+                  N = (F x 120) / P
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">
+                  Onde <strong>N</strong> é a rotação síncrona do campo girante em rpm, <strong>F</strong> é a frequência da rede em Hertz (Hz) e <strong>P</strong> é a quantidade total de polos físicos do motor.
+                </p>
+                <div class="text-[11px] font-mono text-slate-400 space-y-1 pt-2 border-t border-panel-800">
+                  <div>2 Polos (60 Hz) = 3600 rpm</div>
+                  <div>4 Polos (60 Hz) = 1800 rpm</div>
+                  <div>6 Polos (60 Hz) = 1200 rpm</div>
+                  <div>8 Polos (60 Hz) = 900 rpm</div>
+                </div>
+              </div>
+
+              <!-- Fórmula 2: Conversão de Potência -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-amber-500/30 space-y-3">
+                <span class="text-xs uppercase font-mono font-bold text-amber-400 block">Conversão de Potência Mecânica</span>
+                <div class="bg-panel-900 p-3 rounded-lg border border-panel-800 text-center font-mono text-sm font-bold text-white space-y-1">
+                  <div>1 CV = 736 W = 0,736 kW</div>
+                  <div>1 HP = 746 W = 0,746 kW</div>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">
+                  Para dimensionar a potência de saída mínima do inversor em kW: Multiplica-se a potência mecânica do motor de CV por 0,736 ou de HP por 0,746.
+                </p>
+                <div class="p-2.5 rounded bg-panel-900 border border-panel-800 text-xs font-mono text-emerald-400">
+                  Exemplo: Motor de 10 CV = 10 x 736 = 7360 W = 7,36 kW nominais.
+                </div>
+              </div>
+
+              <!-- Fórmula 3: Fatores de Tensão -->
+              <div class="bg-panel-950/80 p-5 rounded-xl border border-amber-500/30 space-y-3">
+                <span class="text-xs uppercase font-mono font-bold text-amber-400 block">Conversão de Corrente por Tensão</span>
+                <div class="bg-panel-900 p-3 rounded-lg border border-panel-800 text-center font-mono text-sm font-bold text-white space-y-1">
+                  <div>I(380V) = I(220V) x 0,577</div>
+                  <div>I(440V) = I(220V) x 0,500</div>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">
+                  A relação inversa de corrente decorre da raiz de três nos sistemas trifásicos equilibrados. Permite converter a corrente de placa tabelada em 220 V para barramentos de 380 V ou 440 V.
+                </p>
+                <div class="p-2.5 rounded bg-panel-900 border border-panel-800 text-xs font-mono text-emerald-400">
+                  Exemplo: Motor de 20 CV (50,3 A em 220V) consumirá 50,3 x 0,577 = 29,02 A em 380V.
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </article>
+
+        <!-- GAVETA 4: Engenharia de Manutenção & Normas -->
+        <article class="cabinet-drawer bg-panel-900 border border-panel-700 rounded-xl overflow-hidden" id="drawer-4">
+          <!-- Puxador da Gaveta -->
+          <div onclick="toggleDrawer('drawer-4')" class="drawer-handle p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none border-b border-panel-700 hover:border-cyan-500/50 transition">
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="w-10 h-10 rounded-lg bg-emerald-950 border border-emerald-500/50 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm shrink-0">
+                04
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base sm:text-lg font-bold text-white tracking-wide">
+                    Engenharia de Manutenção, Diagnóstico de Falhas & Normas
+                  </h3>
+                  <span class="hidden md:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    NR-10, NR-12 & Preditiva
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400">Termografia, capacitores do barramento CC, ensaios de isolamento e contator KM1</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono text-emerald-400 hidden sm:inline">GAVETA [04]</span>
+              <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 drawer-icon"></i>
+            </div>
+          </div>
+
+          <!-- Conteúdo da Gaveta -->
+          <div class="drawer-content p-6 sm:p-8 space-y-6 bg-panel-900/60 text-slate-300 text-sm">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+              <!-- Coluna 1: Manutenção Preditiva e Preventiva -->
+              <div class="space-y-4">
+                <h4 class="font-bold text-white text-base flex items-center gap-2">
+                  <i class="fa-solid fa-screwdriver-wrench text-emerald-400"></i>
+                  Procedimentos de Manutenção de Bancada e Campo
+                </h4>
+                
+                <div class="space-y-3 text-xs">
+                  <div class="bg-panel-950 p-3.5 rounded-lg border border-panel-800">
+                    <strong class="text-cyan-300 block mb-1">1. Termografia & Dissipação Térmica:</strong>
+                    Inspeção com câmera termográfica nas conexões de potência (L1, L2, L3 e U, V, W) para rastrear pontos quentes por torque incorreto nos parafusos. Limpeza semestral com ar comprimido seco das aletas de dissipação de calor dos semicondutores.
+                  </div>
+
+                  <div class="bg-panel-950 p-3.5 rounded-lg border border-panel-800">
+                    <strong class="text-cyan-300 block mb-1">2. Capacitores Eletrolíticos & Reformação (Reforming):</strong>
+                    Os capacitores do barramento CC possuem eletrólito que degrada com calor e desuso prolongado. Equipamentos parados por mais de 1 ano exigem <em>reformação de capacitores</em> aplicando tensão gradativa através de reostato antes da energização plena para evitar explosão.
+                  </div>
+
+                  <div class="bg-panel-950 p-3.5 rounded-lg border border-panel-800">
+                    <strong class="text-cyan-300 block mb-1">3. Ensaio de Isolamento com Megômetro:</strong>
+                    Ao realizar teste de isolação na fiação e motor com megômetro (500V ou 1000Vcc), é OBRIGATÓRIO desconectar totalmente os bornes de saída do inversor/soft-starter, pois a alta tensão do ensaio destrói instantaneamente os tiristores e IGBTs.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Coluna 2: Normas de Segurança NR-10 e NR-12 -->
+              <div class="space-y-4">
+                <h4 class="font-bold text-white text-base flex items-center gap-2">
+                  <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
+                  Diretrizes de Segurança NR-10, NR-12 & Blindagem
+                </h4>
+
+                <div class="space-y-3 text-xs">
+                  <div class="bg-panel-950 p-3.5 rounded-lg border border-panel-800">
+                    <strong class="text-amber-300 block mb-1">NR-12: Contator de Manobra (KM1) a Montante:</strong>
+                    A NR-12 exige contator de isolação galvânica antes da soft-starter. Como muitos modelos controlam apenas 2 fases, a terceira fase permanece energizada diretamente no motor. Na manutenção, a soft-starter em STOP oferece risco iminente de choque se não houver o contator KM1 aberto.
+                  </div>
+
+                  <div class="bg-panel-950 p-3.5 rounded-lg border border-panel-800">
+                    <strong class="text-amber-300 block mb-1">NR-10: Malha de Aterramento Individual em Estrela:</strong>
+                    Todo inversor deve ter o borne Pe conectado de modo independente em estrela até a barra principal de terra (sem encadeamento em série daisy-chain). A resistência da malha de aterramento deve ser obrigatoriamente inferior a 10 ohms.
+                  </div>
+
+                  <div class="bg-panel-950 p-3.5 rounded-lg border border-panel-800">
+                    <strong class="text-amber-300 block mb-1">Compatibilidade Eletromagnética (EMC) & Blindagem:</strong>
+                    Cabos analógicos de controle (0-10V / 4-20mA) devem transitar em canaletas exclusivas e possuir malha trançada blindada com aterramento em apenas UMA de suas extremidades, evitando correntes de loop induzidas pelo chaveamento de alta frequência dos IGBTs.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO: BANCADA DE CÁLCULO DE ENGENHARIA -->
+    <section id="calculadora" class="bg-panel-900 border border-panel-700 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-panel-800 pb-4 gap-3">
+        <div>
+          <h2 class="text-2xl font-black text-white flex items-center gap-3">
+            <i class="fa-solid fa-microchip text-amber-400"></i>
+            Bancada de Cálculo e Dimensionamento Eletrotécnico
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Simulador numérico instantâneo para verificação de cinemática, dimensionamento elétrico e comparação de métodos de partida.
+          </p>
+        </div>
+        <span class="px-3 py-1 rounded bg-amber-950 text-amber-400 border border-amber-600/40 text-xs font-mono font-bold self-start sm:self-auto">
+          Ferramenta de Dimensionamento
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Bloco 1: Cinemática da Rotação -->
+        <div class="bg-panel-950 p-5 rounded-xl border border-panel-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">
+              <span>Velocidade Síncrona</span>
+              <i class="fa-solid fa-rotate"></i>
+            </div>
+            <p class="text-xs text-slate-400 font-mono mb-4">N = (F x 120) / P</p>
+
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Frequência Elétrica (Hz):</label>
+                <input type="number" id="workbench-freq" value="60" min="1" max="300" class="w-full bg-panel-900 border border-panel-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-cyan-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Polos do Estator (P):</label>
+                <select id="workbench-polos" class="w-full bg-panel-900 border border-panel-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-cyan-400 focus:outline-none">
+                  <option value="2">2 Polos</option>
+                  <option value="4" selected>4 Polos</option>
+                  <option value="6">6 Polos</option>
+                  <option value="8">8 Polos</option>
+                  <option value="10">10 Polos</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-panel-800">
+            <span class="text-xs text-slate-400 block">Rotação Síncrona Resultante:</span>
+            <div class="text-3xl font-black font-mono text-cyan-400 mt-1" id="out-rotacao">1800 rpm</div>
+            <span class="text-[10px] text-slate-500 mt-1 block">A velocidade assíncrona real de placa terá o desconto do escorregamento mecânico.</span>
+          </div>
+        </div>
+
+        <!-- Bloco 2: Potência e Correntes por Tensão -->
+        <div class="bg-panel-950 p-5 rounded-xl border border-panel-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+              <span>Potência & Níveis de Tensão</span>
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <p class="text-xs text-slate-400 font-mono mb-4">1 CV = 736 W | 1 HP = 746 W</p>
+
+            <div class="space-y-3">
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">Potência:</label>
+                  <input type="number" id="workbench-pot" value="15" min="0.25" step="0.5" class="w-full bg-panel-900 border border-panel-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-amber-400 focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">Unidade:</label>
+                  <select id="workbench-unid" class="w-full bg-panel-900 border border-panel-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-amber-400 focus:outline-none">
+                    <option value="CV" selected>CV</option>
+                    <option value="HP">HP</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">Tensão Trifásica de Operação:</label>
+                <select id="workbench-tensao" class="w-full bg-panel-900 border border-panel-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-amber-400 focus:outline-none">
+                  <option value="220" selected>220 Vca Trifásico</option>
+                  <option value="380">380 Vca Trifásico (Fator 0,577)</option>
+                  <option value="440">440 Vca Trifásico (Fator 0,500)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-panel-800 space-y-2">
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs text-slate-400">Potência Elétrica Nominal:</span>
+              <span class="text-lg font-bold font-mono text-emerald-400" id="out-pot-kw">11,04 kW</span>
+            </div>
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs text-slate-400">Corrente Estimada (In):</span>
+              <span class="text-2xl font-black font-mono text-amber-400" id="out-corrente">36,90 A</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco 3: Análise Comparativa de Corrente de Partida -->
+        <div class="bg-panel-950 p-5 rounded-xl border border-panel-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-sky-400 uppercase tracking-wider mb-2">
+              <span>Comparativo de Métodos de Partida</span>
+              <i class="fa-solid fa-chart-simple"></i>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Comportamento da sobrecorrente inicial em relação a Inom calculada.</p>
+
+            <div class="space-y-2 text-xs">
+              <!-- Partida Direta -->
+              <div class="p-2.5 rounded bg-panel-900 border border-panel-800 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-white block">Partida Direta Plena</span>
+                  <span class="text-[10px] text-slate-400">Pico severo de ~7,0 x Inom</span>
+                </div>
+                <span class="font-mono font-bold text-rose-400 text-sm" id="out-partida-direta">258,3 A</span>
+              </div>
+
+              <!-- Estrela-Triângulo -->
+              <div class="p-2.5 rounded bg-panel-900 border border-panel-800 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-white block">Chave Estrela-Triângulo</span>
+                  <span class="text-[10px] text-slate-400">Pico atenuado de ~2,3 x Inom</span>
+                </div>
+                <span class="font-mono font-bold text-amber-400 text-sm" id="out-partida-yd">84,9 A</span>
+              </div>
+
+              <!-- Soft-Starter -->
+              <div class="p-2.5 rounded bg-panel-900 border border-cyan-500/30 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-cyan-300 block">Soft-Starter (Tiristores)</span>
+                  <span class="text-[10px] text-slate-400">Partida suave com ~2,5 x Inom</span>
+                </div>
+                <span class="font-mono font-bold text-cyan-400 text-sm" id="out-partida-ss">92,3 A</span>
+              </div>
+
+              <!-- Inversor -->
+              <div class="p-2.5 rounded bg-panel-900 border border-sky-500/30 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-sky-300 block">Inversor de Frequência (PWM)</span>
+                  <span class="text-[10px] text-slate-400">Controle total <= 1,2 x Inom</span>
+                </div>
+                <span class="font-mono font-bold text-emerald-400 text-sm" id="out-partida-inv">44,3 A</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-500 pt-2 border-t border-panel-800">
+            Valores de pico calculados em tempo real com base na corrente nominal selecionada.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO: SIMULADO DE 30 QUESTÕES -->
+    <section id="simulado" class="space-y-6">
+
+      <!-- Painel de Controle e Métricas do Quiz -->
+      <div class="bg-panel-900 border border-panel-700 rounded-2xl p-5 sm:p-6 sticky top-20 z-40 backdrop-blur shadow-2xl space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-black text-white">Simulado Avaliativo Oficial de 30 Questões</h2>
+              <span id="quiz-filter-label" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700">Todas</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 font-mono">
+              <span>Respondidas: <strong class="text-white text-sm" id="stat-answered">0</strong> / 30</span>
+              <span>Acertos: <strong class="text-emerald-400 text-sm" id="stat-correct">0</strong></span>
+              <span>Erros: <strong class="text-rose-400 text-sm" id="stat-wrong">0</strong></span>
+              <span>Taxa: <strong class="text-cyan-400 text-sm" id="stat-pct">0%</strong></span>
+            </div>
+          </div>
+
+          <!-- Filtros de Questões -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="filterQuiz('all')" id="btn-flt-all" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-cyan-600 text-white">
+              Todas (30)
+            </button>
+            <button onclick="filterQuiz('ss')" id="btn-flt-ss" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-panel-800 text-slate-300 hover:bg-panel-700">
+              Soft-Starter (15)
+            </button>
+            <button onclick="filterQuiz('inv')" id="btn-flt-inv" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-panel-800 text-slate-300 hover:bg-panel-700">
+              Inversor (15)
+            </button>
+            <button onclick="resetQuiz()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-panel-800 hover:bg-rose-950 text-slate-300 hover:text-rose-300 border border-panel-700 transition" title="Reiniciar Simulado">
+              <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Reiniciar
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra de Progresso Visual -->
+        <div class="w-full bg-panel-950 rounded-full h-2.5 overflow-hidden border border-panel-800">
+          <div id="quiz-progress-bar" class="bg-gradient-to-r from-cyan-500 via-sky-500 to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Container de Questões Dinâmicas -->
+      <div id="questions-box" class="space-y-6">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <!-- Relatório Final de Aproveitamento -->
+      <div id="quiz-report-card" class="hidden bg-panel-900 border border-panel-700 rounded-2xl p-6 sm:p-8 space-y-6 text-center shadow-2xl">
+        <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 text-cyan-400 mx-auto flex items-center justify-center border border-cyan-500/40 text-2xl">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h3 class="text-2xl font-black text-white">Relatório Consolidado de Desempenho</h3>
+          <p class="text-slate-400 text-sm mt-1">Avaliação técnica segundo parâmetros curriculares industriais</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto font-mono">
+          <div class="bg-panel-950 p-4 rounded-xl border border-panel-800">
+            <span class="text-xs text-slate-400 block">Nota Final</span>
+            <span class="text-3xl font-black text-white" id="rep-score">0%</span>
+          </div>
+          <div class="bg-panel-950 p-4 rounded-xl border border-panel-800">
+            <span class="text-xs text-slate-400 block">Acertos</span>
+            <span class="text-3xl font-black text-emerald-400" id="rep-correct">0</span>
+          </div>
+          <div class="bg-panel-950 p-4 rounded-xl border border-panel-800">
+            <span class="text-xs text-slate-400 block">Erros</span>
+            <span class="text-3xl font-black text-rose-400" id="rep-wrong">0</span>
+          </div>
+        </div>
+
+        <div id="rep-feedback" class="text-sm p-4 rounded-xl max-w-2xl mx-auto leading-relaxed"></div>
+
+        <button onclick="scrollToSection('simulado')" class="px-6 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition">
+          Revisar Respostas no Simulado
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="bg-panel-950 border-t border-panel-800 py-8 px-4 text-center text-xs text-slate-500 no-print">
+    <div class="max-w-7xl mx-auto space-y-2">
+      <div class="flex items-center justify-center gap-2 text-slate-400 font-semibold">
+        <i class="fa-solid fa-microchip text-cyan-400"></i>
+        <span>Portal de Acionamentos Eletroeletrônicos Industriais</span>
+      </div>
+      <p>Desenvolvido para Ensino Técnico, Formação Profissional e Engenharia de Aplicação.</p>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // BANCO DE DADOS: 30 QUESTÕES (15 SOFT-STARTER + 15 INVERSOR DE FREQUÊNCIA)
+    // Sem uso de cifrão ('$') em nenhum local.
+    // =========================================================================
+    const quizData = [
+      // -------------------------------------------------------------
+      // PARTE 1: SOFT-STARTERS (15 QUESTÕES)
+      // -------------------------------------------------------------
+      {
+        id: 1,
+        cat: 'ss',
+        tag: 'Soft-Starter • Topologia & Semicondutores',
+        pergunta: 'Qual é o princípio físico e o componente de estado sólido empregado na etapa de potência de uma Soft-Starter para promover a partida suave de motores assíncronos trifásicos?',
+        opcoes: [
+          { k: 'A', t: 'Variação linear da frequência da rede através de transistores bipolares NPN em banho de óleo dielétrico.' },
+          { k: 'B', t: 'Modulação do ângulo de condução e disparo de tiristores (SCRs) ligados em antiparalelo por fase, variando a tensão eficaz sem alterar a frequência de 60 Hz.' },
+          { k: 'C', t: 'Comutação mecânica de enrolamentos por contatores de vácuo acionados por servomotores.' },
+          { k: 'D', t: 'Conversão da corrente alternada em contínua pura com filtragem indutiva para frenagem magnética.' }
+        ],
+        resp: 'B',
+        coment: 'A soft-starter utiliza pares de tiristores (SCRs) em antiparalelo. Ao alterar o ângulo de disparo de quase 180 graus para zero, modula-se a tensão eficaz (RMS) aplicada ao estator, mantendo a frequência fixa na frequência nominal da rede (60 Hz).'
+      },
+      {
+        id: 2,
+        cat: 'ss',
+        tag: 'Soft-Starter • Tensão de Pedestal Vp',
+        pergunta: 'O parâmetro denominado Tensão de Pedestal (ou Pedestal Voltage) em uma Soft-Starter possui qual função técnica essencial no momento imediato do comando de partida?',
+        opcoes: [
+          { k: 'A', t: 'Fixar a tensão do motor durante a desaceleração para compensar a perda de rotação.' },
+          { k: 'B', t: 'Aplicar um degrau inicial de tensão instantâneo para vencer a inércia e o atrito estático da carga mecânica sem travamentos.' },
+          { k: 'C', t: 'Limitar a tensão máxima de saída em 50% para forçar economia de energia em regime contínuo.' },
+          { k: 'D', t: 'Injetar corrente contínua para frenagem dinâmica de emergência do rotor.' }
+        ],
+        resp: 'B',
+        coment: 'A tensão de pedestal (Vp) é o valor de tensão inicial ajustado (normalmente entre 30% a 70% da nominal) aplicado no instante zero da aceleração, conferindo ao motor o conjugado inicial necessário para romper o atrito mecânico de repouso.'
+      },
+      {
+        id: 3,
+        cat: 'ss',
+        tag: 'Soft-Starter • Redução de Corrente de Partida',
+        pergunta: 'Comparando o comportamento da corrente de partida de um motor elétrico de indução sob partida direta com o acionamento via Soft-Starter, o que os ensaios técnicos comprovam?',
+        opcoes: [
+          { k: 'A', t: 'A partida direta consome 1 a 2 vezes In, enquanto a soft-starter eleva o pico para 12 vezes In.' },
+          { k: 'B', t: 'A partida direta gera pico de 6 a 7 vezes a corrente nominal (In), enquanto a soft-starter limita o pico a cerca de 2 a 3 vezes a corrente nominal (In).' },
+          { k: 'C', t: 'A soft-starter zera totalmente a corrente no estator durante os primeiros 10 segundos.' },
+          { k: 'D', t: 'Ambos os métodos apresentam exatamente a mesma demanda de corrente de pico na subestação.' }
+        ],
+        resp: 'B',
+        coment: 'A partida direta provoca picos severos de 6 a 7 vezes a corrente nominal (In). O controle gradual de tensão da soft-starter atenua o surto elétrico para patamares entre 2 a 3 vezes In, evitando quedas de tensão no barramento.'
+      },
+      {
+        id: 4,
+        cat: 'ss',
+        tag: 'Soft-Starter • Segurança & NR-12',
+        pergunta: 'Por exigência expressa da Norma Regulamentadora NR-12 e boas práticas de projetos industriais, por que deve existir um contator de manobra (KM1) à montante da Soft-Starter?',
+        opcoes: [
+          { k: 'A', t: 'Porque muitas soft-starters possuem chaveamento em apenas 2 fases, mantendo uma fase ligada diretamente ao motor, gerando risco iminente de choque elétrico durante intervenções com a chave desligada.' },
+          { k: 'B', t: 'Para elevar automaticamente a tensão da rede de 220 V para 440 V antes dos tiristores.' },
+          { k: 'C', t: 'Exclusivamente para sincronizar a frequência dos pulsos do microprocessador com os polos do motor.' },
+          { k: 'D', t: 'Para filtrar harmônicos de quinta ordem produzidos pelo sistema de bombeamento.' }
+        ],
+        resp: 'A',
+        coment: 'Em diversas chaves soft-starter compactas, o controle de SCRs ocorre em 2 fases, deixando uma terceira fase conectada permanentemente ao estator. A instalação do contator de manobra KM1 garante a isolação galvânica trifásica obrigatória pela NR-12.'
+      },
+      {
+        id: 5,
+        cat: 'ss',
+        tag: 'Soft-Starter • Contator de By-pass KM2',
+        pergunta: 'Qual é o objetivo técnico e térmico da inclusão de um contator de By-pass (KM2) em paralelo com o circuito de tiristores da Soft-Starter?',
+        opcoes: [
+          { k: 'A', t: 'Inverter a sequência de fases no motor durante a velocidade de regime.' },
+          { k: 'B', t: 'Desviar a corrente de regime contínuo dos tiristores após o fim da rampa de aceleração, eliminando perdas térmicas por efeito Joule e estendendo a vida útil dos semicondutores.' },
+          { k: 'C', t: 'Permitir a circulação de corrente contínua pura nos enrolamentos do estator.' },
+          { k: 'D', t: 'Substituir o relé de sobrecarga térmico do painel por fusíveis a vácuo.' }
+        ],
+        resp: 'B',
+        coment: 'Ao concluir a aceleração e atingir a tensão plena, a própria soft-starter aciona o contator KM2 (by-pass). Ele assume a corrente do motor, evitando que os tiristores continuem conduzindo e dissipando calor excessivo em regime permanente.'
+      },
+      {
+        id: 6,
+        cat: 'ss',
+        tag: 'Soft-Starter • Limitação Térmica de Manobras',
+        pergunta: 'Em relação ao regime térmico de trabalho dos semicondutores, qual é o limite médio recomendado de partidas por hora para uma Soft-Starter?',
+        opcoes: [
+          { k: 'A', t: 'Até 120 manobras por hora sem risco de dano térmico aos módulos.' },
+          { k: 'B', t: 'Não deve ultrapassar em média 7 manobras por hora, necessitando de tempo suficiente para o resfriamento dos dissipadores dos tiristores.' },
+          { k: 'C', t: 'Ilimitado, pois os tiristores operam em regime puramente supercondutor.' },
+          { k: 'D', t: 'No máximo 1 partida a cada 24 horas de operação contínua.' }
+        ],
+        resp: 'B',
+        coment: 'Durante o processo de partida com ângulo de disparo, a dissipação térmica nos tiristores é crítica. Partidas repetidas com frequência superior a 7 a 10 manobras/hora causam acúmulo de calor que pode destruir as junções de silício.'
+      },
+      {
+        id: 7,
+        cat: 'ss',
+        tag: 'Soft-Starter • Aplicação em Bombas Hidráulicas',
+        pergunta: 'Em adutoras e estações de bombeamento com tubulações de grande extensão, por que a função de rampa de desaceleração da Soft-Starter é fundamental para a integridade da tubulação?',
+        opcoes: [
+          { k: 'A', t: 'Porque ela esvazia a linha de água em sentido contrário para limpar as válvulas de fundo de poço.' },
+          { k: 'B', t: 'Porque ela reduz gradativamente a velocidade do rotor, evitando o fechamento brusco das válvulas e eliminando o pico de sobrepressão destrutivo denominado golpe de aríete.' },
+          { k: 'C', t: 'Para devolver potência ativa excedente à rede elétrica da concessionária.' },
+          { k: 'D', t: 'Para manter a temperatura da voluta da bomba em nível criogênico.' }
+        ],
+        resp: 'B',
+        coment: 'O desligamento súbito de bombas centrífugas provoca refluxo violento da água e choque contra retenções (golpe de aríete). A parada desacelerada da soft-starter dissipa a energia cinética do fluido suavemente, poupando tubos e conexões.'
+      },
+      {
+        id: 8,
+        cat: 'ss',
+        tag: 'Soft-Starter • Cálculo de Dimensionamento de Corrente',
+        pergunta: 'Deseja-se especificar uma Soft-Starter para acionar um motor trifásico de 50 CV alimentado em rede de 220 Vca. De acordo com a tabela técnica, o motor consome 120 A nominais. Qual deve ser o critério de seleção da chave?',
+        opcoes: [
+          { k: 'A', t: 'Escolher um modelo cuja capacidade nominal contínua de corrente seja igual ou superior a 120 A (por exemplo, modelo padronizado de 130 A).' },
+          { k: 'B', t: 'Especificar uma chave com corrente máxima de 60 A, pois o circuito opera em estrela permanente.' },
+          { k: 'C', t: 'Multiplicar a corrente nominal por 7 para definir a faixa nominal contínua da chave estática.' },
+          { k: 'D', t: 'Limitar a escolha a chaves monofásicas com transformador a seco.' }
+        ],
+        resp: 'A',
+        coment: 'O dimensionamento nominal da soft-starter deve cobrir com folga a corrente nominal contínua do motor em plena carga (120 A). Um modelo com especificação de 130 A atende perfeitamente à aplicação industrial com margem de segurança.'
+      },
+      {
+        id: 9,
+        cat: 'ss',
+        tag: 'Soft-Starter • Parametrização Frontal Analógica',
+        pergunta: 'Em modelos compactos de Soft-Starters (como a linha WEG SSW-05 abordada na literatura didática), quais são os 4 trimpots de ajuste local disponíveis no painel frontal?',
+        opcoes: [
+          { k: 'A', t: 'Frequência mínima, frequência máxima, ganho proporcional e tempo derivativo.' },
+          { k: 'B', t: 'Accel Time (tempo de aceleração), Decel Time (desaceleração), Pedestal Voltage (tensão de pedestal) e Motor Current (ajuste de corrente do motor para proteção térmica).' },
+          { k: 'C', t: 'Modulação vetorial, slip assíncrono, tensão de barramento e resistência de aterramento.' },
+          { k: 'D', t: 'Passo do encoder, tensão de gate, compensação de escorregamento e relação V/F.' }
+        ],
+        resp: 'B',
+        coment: 'A SSW-05 dispõe de 4 trimpots analógicos frontais: Accel Time (1 a 20s), Decel Time (Off a 20s), Pedestal Voltage (30% a 80% Vn) e Motor Current (30% a 100% da chave para a proteção de sobrecarga integrada).'
+      },
+      {
+        id: 10,
+        cat: 'ss',
+        tag: 'Soft-Starter • Dinâmica da Forma de Onda Senoidal',
+        pergunta: 'O que ocorre com a forma de onda da tensão entregue aos bornes do motor durante o transcorrer do tempo tr da rampa de aceleração linear da Soft-Starter?',
+        opcoes: [
+          { k: 'A', t: 'A onda permanece puramente quadrada com frequência variando de 10 a 60 Hz.' },
+          { k: 'B', t: 'O ângulo de disparo decresce progressivamente em direção a zero, aumentando a área sombreada de condução senoidal até entregar a senóide completa da rede com 100% da tensão nominal.' },
+          { k: 'C', t: 'A tensão atinge o dobro da nominal no primeiro quarto de ciclo e se estabiliza em CC.' },
+          { k: 'D', t: 'A onda senoidal é filtrada por indutores que eliminam a componente fundamental de 60 Hz.' }
+        ],
+        resp: 'B',
+        coment: 'Conforme diagramas de tempo do material, os tiristores conduzem inicialmente apenas fatias finais de cada semiciclo. Conforme o tempo tr avança, o ângulo aproxima-se de zero e a forma de onda senoidal preenche o ciclo completo.'
+      },
+      {
+        id: 11,
+        cat: 'ss',
+        tag: 'Soft-Starter • Diagnóstico de Falha STALL',
+        pergunta: 'Durante o processo de partida com uma Soft-Starter, o LED de diagnóstico acusa a falha STALL. O que este alarme significa na prática operacional?',
+        opcoes: [
+          { k: 'A', t: 'A frequência da rede caiu abaixo de 20 Hz durante o ciclo de aceleração.' },
+          { k: 'B', t: 'O motor entrou na condição de rotor bloqueado / travamento mecânico por excesso de carga ou emperramento do eixo.' },
+          { k: 'C', t: 'O contator de by-pass foi acionado com atraso de 1 milissegundo.' },
+          { k: 'D', t: 'O botão de parada de emergência foi mantido pressionado por mais de 10 segundos.' }
+        ],
+        resp: 'B',
+        coment: 'O alarme de STALL (rotor travado) é acionado quando a corrente permanece em patamares de sobrecorrente de partida por tempo superior ao programado, indicando que o rotor não conseguiu vencer o travamento mecânico da carga.'
+      },
+      {
+        id: 12,
+        cat: 'ss',
+        tag: 'Soft-Starter • Comparativo com Chave Estrela-Triângulo',
+        pergunta: 'Qual das alternativas descreve vantagens determinantes da Soft-Starter em comparação com o método eletromecânico Estrela-Triângulo?',
+        opcoes: [
+          { k: 'A', t: 'A soft-starter exige 6 cabos de força até o motor e utiliza 3 contatores robustos de manobra.' },
+          { k: 'B', t: 'A soft-starter necessita de apenas 3 cabos de força entre o painel e o motor, elimina o desgaste mecânico por contatos e suprime o segundo pico de corrente da comutação estrela para triângulo.' },
+          { k: 'C', t: 'A partida estrela-triângulo permite variar a velocidade em regime contínuo de produção.' },
+          { k: 'D', t: 'A partida estrela-triângulo elimina a necessidade de relé de sobrecarga na instalação.' }
+        ],
+        resp: 'B',
+        coment: 'A estrela-triângulo gera um severo choque mecânico e novo pico de corrente na mudança de contator, além de exigir 6 cabos. A soft-starter proporciona aceleração contínua sem trancos com apenas 3 condutores de força.'
+      },
+      {
+        id: 13,
+        cat: 'ss',
+        tag: 'Soft-Starter • Manutenção em Sistemas sem By-pass',
+        pergunta: 'Em rotinas de manutenção preventiva de um painel elétrico com Soft-Starters operando em regime SEM contator de by-pass, qual cuidado térmico é prioritário?',
+        opcoes: [
+          { k: 'A', t: 'Troca mensal das escovas de carvão e comutadores dos tiristores de potência.' },
+          { k: 'B', t: 'Inspeção termográfica dos dissipadores e barramentos, limpeza semestral das aletas de refrigeração e verificação do funcionamento contínuo do cooler de exaustão.' },
+          { k: 'C', t: 'Substituição das bobinas de sincronismo do microprocessador.' },
+          { k: 'D', t: 'Manter a tampa do painel permanentemente aberta em ambientes corrosivos.' }
+        ],
+        resp: 'B',
+        coment: 'Sem by-pass, a corrente nominal circula continuamente através dos tiristores. A inspeção termográfica rastreia sobreaquecimento nos terminais, e a limpeza das aletas assegura que a poeira não bloqueie a troca de calor com o ar.'
+      },
+      {
+        id: 14,
+        cat: 'ss',
+        tag: 'Soft-Starter • Limitação Funcional de Rotação',
+        pergunta: 'Um técnico foi consultado para aplicar uma Soft-Starter em uma esteira transportadora para que ela funcione continuamente ora a 20 Hz, ora a 60 Hz. Esta especificação é viável?',
+        opcoes: [
+          { k: 'A', t: 'Sim, ajustando o trimpot de pedestal em 33% para operação permanente em baixa velocidade.' },
+          { k: 'B', t: 'Não. A soft-starter atua apenas na partida e na parada variando a tensão; ela não altera a frequência da rede (mantém 60 Hz fixos), sendo incapaz de variar a rotação em regime permanente.' },
+          { k: 'C', t: 'Sim, desde que seja instalado um contator de by-pass comandado por relé temporizado.' },
+          { k: 'D', t: 'Sim, contanto que o motor seja do tipo síncrono com anéis coletores.' }
+        ],
+        resp: 'B',
+        coment: 'A velocidade de um motor assíncrono é função direta da frequência. Como a soft-starter altera apenas a tensão eficaz durante a aceleração e desaceleração, ela não tem a capacidade física de regular velocidades em regime contínuo.'
+      },
+      {
+        id: 15,
+        cat: 'ss',
+        tag: 'Soft-Starter • Comando do By-pass KM2',
+        pergunta: 'No esquema elétrico padrão de comando de uma Soft-Starter com By-pass, qual elemento comanda a bobina do contator KM2 e em qual momento exato?',
+        opcoes: [
+          { k: 'A', t: 'A botoeira S1 do operador no instante imediato do primeiro toque de partida.' },
+          { k: 'B', t: 'Um contato normalmente aberto (NA) a relé da própria soft-starter, programado para fechar apenas quando a rampa de aceleração for concluída e a tensão atingir 100% de Vn.' },
+          { k: 'C', t: 'Um sensor óptico instalado na polia externa da carga mecânica.' },
+          { k: 'D', t: 'O disjuntor geral de entrada Q1 no momento da energização do barramento.' }
+        ],
+        resp: 'B',
+        coment: 'A soft-starter monitora a evolução da tensão eficaz. Quando o ângulo de disparo atinge zero e o motor recebe tensão plena (Full Voltage), o relé interno comuta seus contatos, acionando a bobina do contator de by-pass KM2.'
+      },
+
+      // -------------------------------------------------------------
+      // PARTE 2: INVERSORES DE FREQUÊNCIA (15 QUESTÕES)
+      // -------------------------------------------------------------
+      {
+        id: 16,
+        cat: 'inv',
+        tag: 'Inversor • Cálculo de Rotação Síncrona 4 Polos',
+        pergunta: 'Utilizando a relação N = (F x 120) / P, qual será a rotação síncrona do campo girante de um motor trifásico de 4 polos quando acionado por um inversor operando na frequência de 30 Hz?',
+        opcoes: [
+          { k: 'A', t: '1800 rpm' },
+          { k: 'B', t: '900 rpm' },
+          { k: 'C', t: '1200 rpm' },
+          { k: 'D', t: '600 rpm' }
+        ],
+        resp: 'B',
+        coment: 'Cálculo: N = (30 x 120) / 4 = 3600 / 4 = 900 rpm. A rotação síncrona é reduzida exatamente pela metade em relação à operação nominal em 60 Hz (1800 rpm).'
+      },
+      {
+        id: 17,
+        cat: 'inv',
+        tag: 'Inversor • Cálculo de Rotação Síncrona 6 Polos',
+        pergunta: 'Qual é a rotação síncrona nominal calculada para um motor de indução trifásico de 6 polos operando na rede padrão brasileira de 60 Hz?',
+        opcoes: [
+          { k: 'A', t: '3600 rpm' },
+          { k: 'B', t: '1800 rpm' },
+          { k: 'C', t: '1200 rpm' },
+          { k: 'D', t: '900 rpm' }
+        ],
+        resp: 'C',
+        coment: 'Cálculo: N = (60 x 120) / 6 = 7200 / 6 = 1200 rpm. Esta é a velocidade síncrona de referência tabelada para motores de 6 polos.'
+      },
+      {
+        id: 18,
+        cat: 'inv',
+        tag: 'Inversor • Cálculo de Conversão de Potência',
+        pergunta: 'Deseja-se especificar a potência mínima em quilowatts (kW) de um inversor para acionar um motor de 25 CV. Sabendo que 1 CV corresponde exatamente a 736 W, o valor nominal calculado é:',
+        opcoes: [
+          { k: 'A', t: '15,00 kW' },
+          { k: 'B', t: '18,40 kW' },
+          { k: 'C', t: '22,08 kW' },
+          { k: 'D', t: '25,00 kW' }
+        ],
+        resp: 'B',
+        coment: 'Cálculo: P = 25 CV x 736 W = 18.400 W. Dividindo por 1000 para converter para quilowatts: P = 18,40 kW (padronizado comercialmente em 18,5 kW).'
+      },
+      {
+        id: 19,
+        cat: 'inv',
+        tag: 'Inversor • Estágio de Saída e IGBTs',
+        pergunta: 'Qual é a tecnologia de semicondutores e a metodologia de controle empregadas na ponte de potência de saída de um inversor de frequência moderno?',
+        opcoes: [
+          { k: 'A', t: 'Tiristores Triacs comandados por trem de pulsos de baixa tensão.' },
+          { k: 'B', t: 'Ponte com 6 transistores IGBT chaveados em alta frequência por modulação PWM (Pulse Width Modulation), gerando formas de onda sintetizadas defasadas a 120 graus.' },
+          { k: 'C', t: 'Relés de estado sólido a laser sem comutação indutiva.' },
+          { k: 'D', t: 'Diodos retificadores rápidos montados em anel de Faraday.' }
+        ],
+        resp: 'B',
+        coment: 'O estágio inversor possui 6 IGBTs (D1 a D6). A CPU gera sinais PWM de alta velocidade que ligam e desligam o barramento CC, emulando corrente alternada senoidal trifásica para o motor.'
+      },
+      {
+        id: 20,
+        cat: 'inv',
+        tag: 'Inversor • Fator de Potência Unitário',
+        pergunta: 'Por que a utilização de inversores de frequência traz um benefício marcante no que diz respeito ao fator de potência visto pela instalação elétrica?',
+        opcoes: [
+          { k: 'A', t: 'Porque ele dissipa a energia reativa diretamente no resistor de frenagem mecânica.' },
+          { k: 'B', t: 'Porque a rede de entrada alimenta uma ponte retificadora trifásica com filtro capacitivo, apresentando fator de potência praticamente unitário (~1,0) e dispensando capacitores de correção para esse motor.' },
+          { k: 'C', t: 'Porque ele induz corrente capacitiva reversa que anula o consumo de potência ativa.' },
+          { k: 'D', t: 'Porque ele eleva o cos phi para 1,50 durante todo o turno produtivo.' }
+        ],
+        resp: 'B',
+        coment: 'A ponte retificadora e o barramento CC fazem com que a corrente de entrada da rede esteja praticamente em fase com a tensão fundamental, resultando em fator de potência próximo de 1,00 para a concessionária.'
+      },
+      {
+        id: 21,
+        cat: 'inv',
+        tag: 'Inversor • Reversão de Fases na Entrada',
+        pergunta: 'Um operador trocou a posição dos cabos das fases L1 e L2 na entrada de alimentação da rede do inversor com a intenção de inverter o sentido de giro do motor. O que acontecerá na prática?',
+        opcoes: [
+          { k: 'A', t: 'O motor inverterá imediatamente a rotação de saída.' },
+          { k: 'B', t: 'O sentido de giro do motor NÃO se alterará, pois a entrada é retificada para CC no barramento intermediário e a sequência de fases de saída é gerada independentemente pela CPU/software.' },
+          { k: 'C', t: 'O inversor explodirá os diodos da ponte retificadora por curto-circuito de fase.' },
+          { k: 'D', t: 'O motor passará a funcionar como freio magnético síncrono permanente.' }
+        ],
+        resp: 'B',
+        coment: 'A ponte de diodos retifica a entrada para tensão contínua CC. Portanto, a sequência das fases de entrada é irrelevante para a saída. A reversão deve ser programada na CPU ou acionada por comando digital (DI).'
+      },
+      {
+        id: 22,
+        cat: 'inv',
+        tag: 'Inversor • Modo Escalar vs. Vetorial',
+        pergunta: 'Em pontes rolantes ou elevadores de carga, onde é mandatório disponibilizar conjugado pleno com o motor operando em velocidade quase nula (ex: 1 Hz), qual controle deve ser adotado e por quê?',
+        opcoes: [
+          { k: 'A', t: 'Controle Escalar V/F, pois eleva a tensão acima de 1000 Vca em baixas frequências.' },
+          { k: 'B', t: 'Controle Vetorial, pois monitora e decompõe separadamente a corrente de magnetização (IM) e a de torque, assegurando conjugado pleno mesmo em rotações próximas de zero.' },
+          { k: 'C', t: 'Partida com autotransformador de taps variáveis.' },
+          { k: 'D', t: 'Controle Escalar com tempo de desaceleração ajustado em zero.' }
+        ],
+        resp: 'B',
+        coment: 'O controle vetorial monitora as correntes ativas e reativas do estator em malha fechada ou aberta, permitindo controlar o fluxo magnético e o torque de forma independente, ideal para movimentação de cargas suspensas.'
+      },
+      {
+        id: 23,
+        cat: 'inv',
+        tag: 'Inversor • Ponto de Inflexão e Enfraquecimento de Campo',
+        pergunta: 'O que ocorre com a tensão e o torque disponível na ponta do eixo quando o inversor é parametrizado para operar a 90 Hz (acima da frequência nominal de rede de 60 Hz)?',
+        opcoes: [
+          { k: 'A', t: 'A tensão cresce linearmente até 600 V e o conjugado é duplicado.' },
+          { k: 'B', t: 'A tensão atinge o valor nominal da rede (ponto de inflexão) e permanece constante no teto; a relação V/F diminui e o motor entra na região de enfraquecimento de campo com torque decrescente.' },
+          { k: 'C', t: 'A corrente cai a zero e o motor desacelera bruscamente até a parada.' },
+          { k: 'D', t: 'Ocorre a saturação magnética imediata que destrói as bobinas do estator.' }
+        ],
+        resp: 'B',
+        coment: 'Como o inversor não pode fornecer tensão maior que a da rede que o alimenta, acima de 60 Hz a tensão permanece no teto nominal. O aumento da frequência reduz a relação V/F, decrescendo o torque disponível.'
+      },
+      {
+        id: 24,
+        cat: 'inv',
+        tag: 'Inversor • Falha por Sobretensão (Overvoltage)',
+        pergunta: 'Se for configurado um tempo de rampa de desaceleração extremamente curto para um exaustor de grande inércia mecânica, qual falha típica será registrada na IHM do inversor?',
+        opcoes: [
+          { k: 'A', t: 'Subtensão no barramento CC por ausência de corrente na ponte retificadora.' },
+          { k: 'B', t: 'Sobretensão no barramento CC (Overvoltage), decorrente da energia cinética regenerada pelo motor atuando como gerador e elevando a tensão sobre os capacitores.' },
+          { k: 'C', t: 'Falha de sequência de fases nos bornes do potenciômetro de referência.' },
+          { k: 'D', t: 'Queima instantânea do fusível ultrarrápido da porta analógica.' }
+        ],
+        resp: 'B',
+        coment: 'Quando a carga roda mais rápido que o campo magnético imposto pela rampa de desaceleração, o motor passa a funcionar como gerador. Essa energia regenerada sobrecarrega os capacitores do link CC, gerando alarme de sobretensão.'
+      },
+      {
+        id: 25,
+        cat: 'inv',
+        tag: 'Inversor • Cálculo com Tabela de Corrente 6B',
+        pergunta: 'De acordo com a Tabela 6B do material, um motor de 10 CV possui corrente nominal de 25,5 A em 220 Vca. Caso alimentado por um inversor em barramento de 380 Vca (usando o fator normatizado de 0,577), qual será a nova corrente nominal?',
+        opcoes: [
+          { k: 'A', t: '51,00 A' },
+          { k: 'B', t: '14,71 A' },
+          { k: 'C', t: '25,50 A' },
+          { k: 'D', t: '8,43 A' }
+        ],
+        resp: 'B',
+        coment: 'Cálculo de conversão segundo a Tabela 6B: I(380V) = I(220V) x 0,577 = 25,5 A x 0,577 = 14,7135 A (aproximadamente 14,71 A).'
+      },
+      {
+        id: 26,
+        cat: 'inv',
+        tag: 'Inversor • Aterramento segundo a NR-10',
+        pergunta: 'Conforme a norma de segurança NR-10 e a figura 6.12 do manual, como deve ser feita a conexão de aterramento de vários inversores e qual a resistência máxima permitida da malha?',
+        opcoes: [
+          { k: 'A', t: 'Ligação em série (daisy-chain de um inversor para o outro), com resistência de até 100 ohms.' },
+          { k: 'B', t: 'Conexão individual de cada inversor em ponto estrela diretamente à barra de aterramento, com resistência do circuito de terra inferior a 10 ohms.' },
+          { k: 'C', t: 'Dispensa de aterramento caso o painel possua portas de policarbonato transparente.' },
+          { k: 'D', t: 'Ligação do borne Pe diretamente ao neutro do secundário do transformador sem haste.' }
+        ],
+        resp: 'B',
+        coment: 'A ligação correta exige que o condutor de proteção (Pe) de cada aparelho vá individualmente até a barra/haste principal (configuração estrela), garantindo resistência de terra inferior a 10 ohms para segurança.'
+      },
+      {
+        id: 27,
+        cat: 'inv',
+        tag: 'Inversor • Prática Operacional de Manobra',
+        pergunta: 'Para preservar a vida útil dos capacitores do barramento CC e resistores de pré-carga, qual método deve ser utilizado para ligar e desligar o motor acionado por inversor?',
+        opcoes: [
+          { k: 'A', t: 'Ligar e desligar diariamente desarmando o disjuntor termomagnético geral de entrada.' },
+          { k: 'B', t: 'Manter a força de entrada permanentemente energizada e comandar as partidas e paradas exclusivamente pelas entradas de controle (bornes digitais DI / comandos de rede ou IHM).' },
+          { k: 'C', t: 'Desconectar a fase W na saída do inversor sob plena carga nominal.' },
+          { k: 'D', t: 'Curto-circuitar os bornes do potenciômetro externo de velocidade.' }
+        ],
+        resp: 'B',
+        coment: 'Ficar energizando e desenergizando a entrada submete o circuito de pré-carga e capacitores a choques de corrente frequentes. As manobras de partida/parada devem ser feitas sempre via entradas digitais de comando (Run/Stop).'
+      },
+      {
+        id: 28,
+        cat: 'inv',
+        tag: 'Inversor • Instalação Multimotor',
+        pergunta: 'Ao utilizar um único inversor de grande porte para acionar simultaneamente dois motores elétricos em paralelo (figura 6.14), qual dispositivo de proteção é estritamente obrigatório?',
+        opcoes: [
+          { k: 'A', t: 'Nenhum dispositivo extra, pois a proteção eletrônica da CPU do inversor cobre ambos.' },
+          { k: 'B', t: 'Instalação de relés térmicos de sobrecarga individuais (U1 e U2) na linha de cada motor, com contatos auxiliares interligados para interromper o funcionamento na interface de controle.' },
+          { k: 'C', t: 'Instalação de reostatos a óleo em série com a fase U de cada máquina.' },
+          { k: 'D', t: 'Contatores de frenagem por contracorrente acoplados nas caixas de ligação.' }
+        ],
+        resp: 'B',
+        coment: 'O inversor mede apenas a corrente total somada. Se um motor sofrer sobrecarga mecânica individual e o outro aliviar, o inversor não detectará o problema. Relés de sobrecarga externos individuais são obrigatórios.'
+      },
+      {
+        id: 29,
+        cat: 'inv',
+        tag: 'Inversor • Blindagem de Sinais Analógicos (EMC)',
+        pergunta: 'Ao conduzir os cabos de referência analógica (0-10 Vcc ou 4-20 mA) entre um CLP e a entrada AI1 do inversor, qual recomendação deve ser adotada para evitar interferências eletromagnéticas (EMI)?',
+        opcoes: [
+          { k: 'A', t: 'Lançar os fios de sinal no mesmo conduíte dos cabos de potência dos IGBTs.' },
+          { k: 'B', t: 'Utilizar fiação blindada com a malha metálica conectada ao terra de proteção em apenas UMA de suas extremidades, evitando correntes parasitas na blindagem.' },
+          { k: 'C', t: 'Aterrar com firmeza as duas extremidades da malha blindada em pontos diferentes do painel.' },
+          { k: 'D', t: 'Eliminar qualquer tipo de aterramento ou malha nos sinais de baixa tensão.' }
+        ],
+        resp: 'B',
+        coment: 'Aterrar as duas pontas da blindagem cria um laço de terra (ground loop) por onde circulam correntes parasitas induzidas pelo chaveamento PWM. Aterrar somente uma extremidade garante blindagem eletrostática eficaz.'
+      },
+      {
+        id: 30,
+        cat: 'inv',
+        tag: 'Inversor • Manutenção: Reformação de Capacitores',
+        pergunta: 'Em rotinas de manutenção preditiva, qual procedimento técnico é obrigatório antes de energizar plenamente um inversor que permaneceu desenergizado no almoxarifado por mais de 1 ano?',
+        opcoes: [
+          { k: 'A', t: 'Trocar preventivamente os 6 módulos IGBTs por modelos de maior corrente.' },
+          { k: 'B', t: 'Proceder com a reformação de capacitores (Capacitor Reforming), aplicando tensão contínua gradativa através de resistores para regenerar a camada de óxido de alumínio do dielétrico.' },
+          { k: 'C', t: 'Injetar água destilada nos terminais do barramento intermediário CC.' },
+          { k: 'D', t: 'Ajustar a frequência mínima para 120 Hz para desobstruir os filtros internos.' }
+        ],
+        resp: 'B',
+        coment: 'Capacitores eletrolíticos parados por muito tempo sofrem degradação na camada de óxido dielétrico. Energizá-los diretamente em plena tensão pode provocar curto-circuito e explosão. O processo de "reforming" restaura o dielétrico com segurança.'
+      }
+    ];
+
+    let userAnswers = {};
+    let activeFilter = 'all';
+
+    // Rola a página suavemente até o elemento
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        const yOffset = -80;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    // Controle de abertura/fechamento das gavetas
+    function toggleDrawer(drawerId) {
+      const drawer = document.getElementById(drawerId);
+      if (!drawer) return;
+
+      const content = drawer.querySelector('.drawer-content');
+      const icon = drawer.querySelector('.drawer-icon');
+      const isOpen = content.classList.contains('open');
+
+      if (isOpen) {
+        content.classList.remove('open');
+        drawer.classList.remove('active');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('open');
+        drawer.classList.add('active');
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function toggleAllDrawers(open) {
+      const drawers = document.querySelectorAll('.cabinet-drawer');
+      drawers.forEach(d => {
+        const content = d.querySelector('.drawer-content');
+        const icon = d.querySelector('.drawer-icon');
+        if (open) {
+          content.classList.add('open');
+          d.classList.add('active');
+          if (icon) icon.style.transform = 'rotate(180deg)';
+        } else {
+          content.classList.remove('open');
+          d.classList.remove('active');
+          if (icon) icon.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+
+    // Renderiza as 30 Questões Dinamicamente
+    function renderQuiz() {
+      const container = document.getElementById('questions-box');
+      container.innerHTML = '';
+
+      quizData.forEach(q => {
+        const isAnswered = userAnswers[q.id] !== undefined;
+        const selectedOption = userAnswers[q.id];
+        const isCorrect = isAnswered && selectedOption === q.resp;
+        
+        let hide = false;
+        if (activeFilter === 'ss' && q.cat !== 'ss') hide = true;
+        if (activeFilter === 'inv' && q.cat !== 'inv') hide = true;
+
+        const card = document.createElement('article');
+        card.id = `q-card-${q.id}`;
+        card.className = `p-6 rounded-2xl border transition-all duration-200 ${
+          hide ? 'hidden' : 'block'
+        } ${
+          !isAnswered 
+            ? 'bg-panel-900 border-panel-700/80 hover:border-panel-600' 
+            : isCorrect 
+              ? 'bg-emerald-950/20 border-emerald-500/40 shadow-lg shadow-emerald-950/30' 
+              : 'bg-rose-950/20 border-rose-500/40 shadow-lg shadow-rose-950/30'
+        }`;
+
+        let badgeColor = q.cat === 'ss' ? 'bg-cyan-950 text-cyan-300 border-cyan-800' : 'bg-sky-950 text-sky-300 border-sky-800';
+
+        let html = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md border ${badgeColor}">
+                ${q.tag}
+              </span>
+              <span class="text-xs text-slate-400 font-mono">Q${String(q.id).padStart(2, '0')}/30</span>
+            </div>
+            ${isAnswered ? `
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${
+                isCorrect ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+              }">
+                <i class="fa-solid ${isCorrect ? 'fa-check' : 'fa-xmark'}"></i>
+                ${isCorrect ? 'Correto' : 'Incorreto'}
+              </span>
+            ` : '<span class="text-xs text-slate-500 font-medium">Pendente de Resposta</span>'}
+          </div>
+
+          <p class="font-medium text-white text-sm sm:text-base leading-relaxed mb-5">${q.pergunta}</p>
+
+          <div class="space-y-2.5">
+        `;
+
+        q.opcoes.forEach(opt => {
+          let btnClass = "bg-panel-950/70 border-panel-800 text-slate-300 hover:bg-panel-800 hover:border-panel-700";
+          if (isAnswered) {
+            if (opt.k === q.resp) {
+              btnClass = "bg-emerald-950/60 border-emerald-500 text-emerald-200 font-semibold";
+            } else if (opt.k === selectedOption && !isCorrect) {
+              btnClass = "bg-rose-950/60 border-rose-500 text-rose-200 line-through";
+            } else {
+              btnClass = "bg-panel-950/30 border-panel-900 text-slate-500 opacity-60";
+            }
+          }
+
+          html += `
+            <button 
+              type="button" 
+              onclick="answerQuestion(${q.id}, '${opt.k}')" 
+              class="w-full text-left p-3.5 rounded-xl border flex items-start gap-3 transition text-xs sm:text-sm ${btnClass}"
+              ${isAnswered ? 'disabled' : ''}>
+              <span class="w-6 h-6 rounded-lg bg-panel-850 border border-panel-700 flex items-center justify-center shrink-0 font-mono text-xs font-bold ${
+                isAnswered && opt.k === q.resp ? 'bg-emerald-700 text-white border-emerald-500' : ''
+              }">
+                ${opt.k}
+              </span>
+              <span class="pt-0.5 leading-relaxed">${opt.t}</span>
+            </button>
+          `;
+        });
+
+        html += `</div>`;
+
+        if (isAnswered) {
+          html += `
+            <div class="mt-4 pt-4 border-t border-panel-800 text-xs leading-relaxed space-y-1 ${
+              isCorrect ? 'text-emerald-300' : 'text-slate-300'
+            }">
+              <div class="font-bold flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-400">
+                <i class="fa-solid fa-book-open text-cyan-400"></i>
+                Justificativa Técnica Normatizada:
+              </div>
+              <p class="p-3 bg-panel-950 rounded-lg border border-panel-800">${q.coment}</p>
+            </div>
+          `;
+        }
+
+        card.innerHTML = html;
+        container.appendChild(card);
+      });
+
+      updateQuizStats();
+    }
+
+    function answerQuestion(qid, optKey) {
+      if (userAnswers[qid] !== undefined) return;
+      userAnswers[qid] = optKey;
+      renderQuiz();
+    }
+
+    function filterQuiz(filtro) {
+      activeFilter = filtro;
+      
+      document.querySelectorAll('#btn-flt-all, #btn-flt-ss, #btn-flt-inv').forEach(b => {
+        b.classList.remove('bg-cyan-600', 'text-white');
+        b.classList.add('bg-panel-800', 'text-slate-300');
+      });
+
+      const btn = document.getElementById(`btn-flt-${filtro}`);
+      if (btn) {
+        btn.classList.remove('bg-panel-800', 'text-slate-300');
+        btn.classList.add('bg-cyan-600', 'text-white');
+      }
+
+      const lbl = document.getElementById('quiz-filter-label');
+      if (filtro === 'all') lbl.innerText = 'Todas (30)';
+      if (filtro === 'ss') lbl.innerText = 'Soft-Starter (15)';
+      if (filtro === 'inv') lbl.innerText = 'Inversor (15)';
+
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      if (Object.keys(userAnswers).length > 0) {
+        userAnswers = {};
+        document.getElementById('quiz-report-card').classList.add('hidden');
+        renderQuiz();
+      }
+    }
+
+    function updateQuizStats() {
+      const total = quizData.length;
+      const answered = Object.keys(userAnswers).length;
+      let correct = 0;
+
+      quizData.forEach(q => {
+        if (userAnswers[q.id] === q.resp) correct++;
+      });
+
+      const wrong = answered - correct;
+      const pct = answered > 0 ? Math.round((correct / total) * 100) : 0;
+
+      document.getElementById('stat-answered').innerText = answered;
+      document.getElementById('stat-correct').innerText = correct;
+      document.getElementById('stat-wrong').innerText = wrong;
+      document.getElementById('stat-pct').innerText = `${pct}%`;
+      document.getElementById('nav-count').innerText = `${answered}/${total}`;
+
+      const bar = document.getElementById('quiz-progress-bar');
+      if (bar) {
+        bar.style.width = `${(answered / total) * 100}%`;
+      }
+
+      // Se concluiu todas as 30 questões
+      if (answered === total) {
+        const report = document.getElementById('quiz-report-card');
+        report.classList.remove('hidden');
+        document.getElementById('rep-score').innerText = `${pct}%`;
+        document.getElementById('rep-correct').innerText = correct;
+        document.getElementById('rep-wrong').innerText = wrong;
+
+        const fb = document.getElementById('rep-feedback');
+        if (pct >= 85) {
+          fb.className = "text-sm p-4 rounded-xl max-w-2xl mx-auto leading-relaxed bg-emerald-950/60 border border-emerald-600 text-emerald-200";
+          fb.innerHTML = `<strong>Desempenho de Nível Excelente!</strong> Você demonstrou pleno domínio de tiristores, controle PWM, parametrização de rampas e pedestal, normas de segurança NR-10 e NR-12 e cálculos de cinemática e corrente elétrica industrial.`;
+        } else if (pct >= 60) {
+          fb.className = "text-sm p-4 rounded-xl max-w-2xl mx-auto leading-relaxed bg-amber-950/60 border border-amber-600 text-amber-200";
+          fb.innerHTML = `<strong>Aproveitamento Técnico Aprovado!</strong> Bom desempenho geral, com necessidade pontual de revisão nos conceitos de contator de by-pass, sobrefrequência com enfraquecimento de campo e regime de manobras horárias.`;
+        } else {
+          fb.className = "text-sm p-4 rounded-xl max-w-2xl mx-auto leading-relaxed bg-rose-950/60 border border-rose-600 text-rose-200";
+          fb.innerHTML = `<strong>Necessita de Reforço Técnico!</strong> Sugerimos reabrir as 4 gavetas técnicas no início deste portal, focando nos procedimentos de manutenção preditiva, cálculos de rotação e circuitos com CLP.`;
+        }
+      }
+    }
+
+    // =========================================================================
+    // MOTORES DE CÁLCULO DA BANCADA ELETROTÉCNICA
+    // =========================================================================
+    const tabelaMotores220 = {
+      0.16: 0.77, 0.25: 1.02, 0.33: 1.34, 0.5: 1.71, 0.75: 2.39,
+      1: 3.01, 1.5: 4.28, 2: 5.46, 3: 8.43, 4: 11.0, 5: 12.9,
+      6: 15.8, 7.5: 19.1, 10: 25.5, 12.5: 31.4, 15: 36.9, 20: 50.3,
+      25: 61.6, 30: 72.1, 40: 99.0, 50: 120.0, 60: 143.0, 75: 174.0, 100: 233.0
+    };
+
+    function calcularBancada() {
+      // 1. Rotação Síncrona: N = (F x 120) / P
+      const freq = parseFloat(document.getElementById('workbench-freq').value) || 60;
+      const polos = parseInt(document.getElementById('workbench-polos').value) || 4;
+      const rpm = Math.round((freq * 120) / polos);
+      document.getElementById('out-rotacao').innerText = `${rpm} rpm`;
+
+      // 2. Potência em kW e Corrente
+      const potVal = parseFloat(document.getElementById('workbench-pot').value) || 15;
+      const unid = document.getElementById('workbench-unid').value;
+      const tensao = document.getElementById('workbench-tensao').value;
+
+      let kw = 0;
+      let cvEquiv = potVal;
+      if (unid === 'CV') {
+        kw = (potVal * 736) / 1000;
+      } else {
+        kw = (potVal * 746) / 1000;
+        cvEquiv = (potVal * 746) / 736;
+      }
+      document.getElementById('out-pot-kw').innerText = `${kw.toFixed(2).replace('.', ',')} kW`;
+
+      // Interpolação/busca de corrente nominal na tabela 220V
+      const chaves = Object.keys(tabelaMotores220).map(Number).sort((a,b) => a-b);
+      let closest = chaves[0];
+      for (let k of chaves) {
+        if (Math.abs(k - cvEquiv) < Math.abs(closest - cvEquiv)) closest = k;
+      }
+      let i220 = tabelaMotores220[closest];
+      let iFinal = i220;
+
+      if (tensao === '380') iFinal = i220 * 0.577;
+      if (tensao === '440') iFinal = i220 * 0.500;
+
+      document.getElementById('out-corrente').innerText = `${iFinal.toFixed(2).replace('.', ',')} A`;
+
+      // 3. Comparativo de Métodos de Partida
+      const pDireta = iFinal * 7.0;
+      const pYD = iFinal * 2.3;
+      const pSS = iFinal * 2.5;
+      const pInv = iFinal * 1.2;
+
+      document.getElementById('out-partida-direta').innerText = `${pDireta.toFixed(1).replace('.', ',')} A`;
+      document.getElementById('out-partida-yd').innerText = `${pYD.toFixed(1).replace('.', ',')} A`;
+      document.getElementById('out-partida-ss').innerText = `${pSS.toFixed(1).replace('.', ',')} A`;
+      document.getElementById('out-partida-inv').innerText = `${pInv.toFixed(1).replace('.', ',')} A`;
+    }
+
+    // Inicialização ao carregar a página
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+
+      // Listeners dos inputs da bancada
+      ['workbench-freq', 'workbench-polos', 'workbench-pot', 'workbench-unid', 'workbench-tensao'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', calcularBancada);
+          el.addEventListener('change', calcularBancada);
+        }
+      });
+
+      calcularBancada();
+    });
+  </script>
+
+</body>
+</html>
